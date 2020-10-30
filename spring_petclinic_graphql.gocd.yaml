@@ -25,5 +25,7 @@ pipelines:
               - java-8
             tasks:
             - exec:
-                command: ls -l
+                arguments:
+                  - ls -l
+                command: /bin/sh
                 run_if: passed
