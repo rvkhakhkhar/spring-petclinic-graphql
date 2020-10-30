@@ -26,6 +26,8 @@ pipelines:
             tasks:
             - exec:
                 arguments:
-                  - ls -l
+                  - -c
+                  - ./mvnw clean package
                 command: /bin/sh
+                working_directory: backend
                 run_if: passed
