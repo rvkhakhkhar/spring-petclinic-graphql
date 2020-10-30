@@ -7,7 +7,7 @@ pipelines:
     display_order: -1
     materials:
       git-04ff57c:
-        git: git@github.com:rvkhakhkhar/spring-petclinic-graphql.git
+        git: https://github.com/rvkhakhkhar/spring-petclinic-graphql.git
         shallow_clone: false
         auto_update: true
         branch: build-backend
