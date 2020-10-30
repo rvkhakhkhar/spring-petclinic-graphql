@@ -12,7 +12,7 @@ pipelines:
         auto_update: true
         branch: build-backend
     stages:
-    - echo:
+    - Test And Build:
         fetch_materials: true
         keep_artifacts: false
         clean_workspace: true
@@ -20,12 +20,10 @@ pipelines:
           type: success
           allow_only_on_success: false
         jobs:
-          echo_hello:
+          backend:
             resources:
               - java-8
             tasks:
             - exec:
-                arguments:
-                - hello world
-                command: echo
+                command: cd backend && ./mvnw clean package
                 run_if: passed
