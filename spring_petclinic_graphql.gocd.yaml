@@ -21,6 +21,8 @@ pipelines:
           allow_only_on_success: false
         jobs:
           echo_hello:
+            resources:
+              - java-8
             tasks:
             - exec:
                 arguments:
