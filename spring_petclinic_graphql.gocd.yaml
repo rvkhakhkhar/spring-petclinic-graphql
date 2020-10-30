@@ -25,7 +25,9 @@ pipelines:
               - java-8
             tasks:
             - exec:
-                command: cd backend
+                arguments:
+                  - backend
+                command: cd
                 run_if: passed
             - exec:
                 arguments:
