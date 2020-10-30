@@ -25,12 +25,5 @@ pipelines:
               - java-8
             tasks:
             - exec:
-                arguments:
-                  - backend
-                command: cd
-                run_if: passed
-            - exec:
-                arguments:
-                  - clean package
-                command: ./mvnw
+                command: ls -l
                 run_if: passed
