@@ -10,7 +10,7 @@ pipelines:
         git: https://github.com/rvkhakhkhar/spring-petclinic-graphql.git
         shallow_clone: false
         auto_update: true
-        branch: build-frontend
+        branch: master
     stages:
     - Test_And_Build:
         fetch_materials: true
