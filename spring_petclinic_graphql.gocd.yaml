@@ -64,7 +64,7 @@ pipelines:
                   is_file: false
                   source: backend-artifact/spring-petclinic-2.0.0.war
                   destination: backend/target/spring-petclinic-2.0.0.war
-                  pipeline: petclinic-manual
+                  pipeline: spring_petclinic_graphql
                   stage: Test_And_Build
                   job: Build_Backend
                   artifact_origin: gocd
