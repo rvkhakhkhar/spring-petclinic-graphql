@@ -47,7 +47,7 @@ pipelines:
                   command: /bin/sh
                   working_directory: frontend
                   run_if: passed
-    - Build_Image:
+    - Build_And_Push_Image:
         fetch_materials: true
         keep_artifacts: false
         clean_workspace: false
@@ -55,7 +55,7 @@ pipelines:
           type: success
           allow_only_on_success: true
         jobs:
-          Build_Image_Backend:
+          Build_And_Push_Image_Backend:
             timeout: 0
             resources:
               - docker
@@ -72,9 +72,36 @@ pipelines:
               - exec:
                   arguments:
                     - -c
-                    - docker build -t petclinic-backend:latest .
+                    - docker build -t gocd-petclinic-backend .
                   command: /bin/sh
                   working_directory: backend
+                  run_if: passed
+              - exec:
+                  arguments:
+                    - -c
+                    - aws ecr get-login-password --region us-east-1
+                  command: /bin/sh
+                  run_if: passed
+              - exec:
+                  arguments:
+                    - -c
+                    - 'aws ecr describe-repositories --repository-names gocd-petclinic-backend
+                    --region us-east-1 || aws ecr create-repository --repository-name
+                    gocd-petclinic-backend --image-tag-mutability IMMUTABLE --region
+                    us-east-1 '
+                  command: /bin/sh
+                  run_if: passed
+              - exec:
+                  arguments:
+                    - -c
+                    - docker tag gocd-petclinic-backend:latest 038062473746.dkr.ecr.us-east-1.amazonaws.com/gocd-petclinic-backend:${GO_LABEL}-${GO_REVISION}
+                  command: /bin/sh
+                  run_if: passed
+              - exec:
+                  arguments:
+                    - -c
+                    - docker push 038062473746.dkr.ecr.us-east-1.amazonaws.com/gocd-petclinic-backend:${GO_LABEL}-${GO_REVISION}
+                  command: /bin/sh
                   run_if: passed
           Build_Image_Frontend:
             timeout: 0
