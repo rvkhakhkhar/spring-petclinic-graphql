@@ -20,9 +20,13 @@ pipelines:
           type: success
           allow_only_on_success: false
         jobs:
-          backend:
+          Build_Backend:
             resources:
               - java-8
+            artifacts:
+              - build:
+                  source: backend/target/spring-petclinic-2.0.0.war
+                  destination: backend-artifact/spring-petclinic-2.0.0.war
             tasks:
             - exec:
                 arguments:
@@ -31,7 +35,7 @@ pipelines:
                 command: /bin/sh
                 working_directory: backend
                 run_if: passed
-          fronend:
+          Build_Frontend:
             resources:
               - node
             tasks:
@@ -40,6 +44,47 @@ pipelines:
                     - -c
                     - yarn install
                     - yarn run dist
+                  command: /bin/sh
+                  working_directory: frontend
+                  run_if: passed
+    - Build_Image:
+        fetch_materials: true
+        keep_artifacts: false
+        clean_workspace: false
+        approval:
+          type: success
+          allow_only_on_success: true
+        jobs:
+          Build_Image_Backend:
+            timeout: 0
+            resources:
+              - docker
+            tasks:
+              - fetch:
+                  is_file: false
+                  source: backend-artifact/spring-petclinic-2.0.0.war
+                  destination: backend/target/spring-petclinic-2.0.0.war
+                  pipeline: spring_petclinic_graphql
+                  stage: Test_And_Build
+                  job: Build_Backend
+                  artifact_origin: gocd
+                  run_if: passed
+              - exec:
+                  arguments:
+                    - -c
+                    - docker build -t petclinic-backend:latest .
+                  command: /bin/sh
+                  working_directory: backend
+                  run_if: passed
+          Build_Image_Frontend:
+            timeout: 0
+            resources:
+              - docker
+            tasks:
+              - exec:
+                  arguments:
+                    - -c
+                    - docker build -t petclinic-frontend:latest .
                   command: /bin/sh
                   working_directory: frontend
                   run_if: passed
