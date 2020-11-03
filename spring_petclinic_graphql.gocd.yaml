@@ -55,8 +55,8 @@ pipelines:
           type: success
           allow_only_on_success: true
         secure_variables:
-          AWS_ACCESS_KEY_ID: {{SECRET:[aws-secrets][access-id]}}
-          AWS_SECRET_ACCESS_KEY: {{SECRET:[aws-secrets][access-key]}}
+          AWS_ACCESS_KEY_ID: "{{SECRET:[aws-secrets][access-id]}}"
+          AWS_SECRET_ACCESS_KEY: "{{SECRET:[aws-secrets][access-key]}}"
         jobs:
           Build_And_Push_Image_Backend:
             timeout: 0
